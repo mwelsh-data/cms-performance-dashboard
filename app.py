@@ -1,50 +1,80 @@
 import streamlit as st
-import pandas as pd
-from supabase import create_client
-from dotenv import load_dotenv
-import os
 
-# Load environment variables
-load_dotenv()
+st.set_page_config(page_title="CMS App", layout="wide")
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+if "mode" not in st.session_state:
+    st.session_state.mode = "home"
 
-# Connect to Supabase
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+# ---------- HOME PAGE ----------
+if st.session_state.mode == "home":
+    st.title("CMS Workforce Dashboard")
+    st.write("Track employees, monitor performance, and surface business insights.")
 
-st.title("CMS Employee Performance Dashboard")
+    col1, col2, col3 = st.columns(3)
 
-# Input form
-with st.form("employee_form"):
-    employee_name = st.text_input("Employee Name")
-    jobs_completed = st.number_input("Jobs Completed", min_value=0, step=1)
-    customer_rating = st.number_input("Customer Rating", min_value=0.0, max_value=5.0, step=0.1)
-    late_arrival = st.checkbox("Late Arrival")
-    damage_claim = st.checkbox("Damage Claim")
-    paperwork_complete = st.checkbox("Paperwork Complete")
-    notes = st.text_area("Notes")
+    with col1:
+        if st.button("Manager Login"):
+            st.session_state.mode = "manager"
 
-    submitted = st.form_submit_button("Submit")
+    with col2:
+        if st.button("Employee Login"):
+            st.session_state.mode = "employee"
 
-    if submitted:
-        data = {
-            "employee_name": employee_name,
-            "jobs_completed": jobs_completed,
-            "customer_rating": customer_rating,
-            "late_arrival": late_arrival,
-            "damage_claim": damage_claim,
-            "paperwork_complete": paperwork_complete,
-            "notes": notes
-        }
+    with col3:
+        if st.button("Just Checking Her Out"):
+            st.session_state.mode = "demo"
 
-        supabase.table("job_performance").insert(data).execute()
-        st.success("Performance record added!")
+# ---------- MANAGER PLACEHOLDER ----------
+elif st.session_state.mode == "manager":
+    st.title("Manager Login")
+    st.info("Manager portal coming soon.")
+    if st.button("Back to Home"):
+        st.session_state.mode = "home"
 
-# Load data
-response = supabase.table("job_performance").select("*").execute()
-df = pd.DataFrame(response.data)
+# ---------- EMPLOYEE PLACEHOLDER ----------
+elif st.session_state.mode == "employee":
+    st.title("Employee Login")
+    st.info("Employee portal coming soon.")
+    if st.button("Back to Home"):
+        st.session_state.mode = "home"
 
-if not df.empty:
-    st.subheader("Performance Records")
-    st.dataframe(df)
+# ---------- DEMO MODE ----------
+elif st.session_state.mode == "demo":
+    st.sidebar.title("Demo Navigation")
+
+    view = st.sidebar.radio(
+        "Choose a view:",
+        [
+            "Dashboard",
+            "Employee Status Tracker",
+            "Performance Log",
+            "Business Insights",
+            "About This App"
+        ]
+    )
+
+    if st.sidebar.button("Back to Home"):
+        st.session_state.mode = "home"
+
+    if view == "Dashboard":
+        st.title("Dashboard")
+        st.write("Overview metrics will go here.")
+
+    elif view == "Employee Status Tracker":
+        st.title("Employee Status Tracker")
+        st.write("Track who is active, unavailable, on job, or completed.")
+
+    elif view == "Performance Log":
+        st.title("Performance Log")
+        st.write("Log employee activity and job performance.")
+
+    elif view == "Business Insights":
+        st.title("Business Insights")
+        st.write("Forecasting, labor productivity, EBITDA-style metrics, and operational KPIs can go here.")
+
+    elif view == "About This App":
+        st.title("About This App")
+        st.write(
+            "This app was built to help small businesses track employee activity, "
+            "monitor operational performance, and turn daily work data into useful business insights."
+        )
