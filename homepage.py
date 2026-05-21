@@ -1,80 +1,81 @@
 import streamlit as st
 
-st.set_page_config(page_title="CMS App", layout="wide")
+st.set_page_config(page_title="CMS Internal Portal", layout="wide")
 
-if "mode" not in st.session_state:
-    st.session_state.mode = "home"
+CMS_BLUE = "#000080"
 
-# ---------- HOME PAGE ----------
-if st.session_state.mode == "home":
-    st.title("CMS Workforce Dashboard")
-    st.write("Track employees, monitor performance, and surface business insights.")
+st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-color: {CMS_BLUE};
+    }}
 
-    col1, col2, col3 = st.columns(3)
+    section.main > div {{
+        padding-top: 0rem;
+    }}
 
-    with col1:
-        if st.button("Manager Login"):
-            st.session_state.mode = "manager"
+    .logo-center {{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-top: 30px;
+        margin-bottom: 20px;
+    }}
 
-    with col2:
-        if st.button("Employee Login"):
-            st.session_state.mode = "employee"
+    .welcome {{
+        text-align: center;
+        color: white;
+        font-family: Georgia, serif;
+        font-size: 60px;
+        font-weight: 700;
+        margin-bottom: 60px;
+    }}
 
-    with col3:
-        if st.button("Just Checking Her Out"):
-            st.session_state.mode = "demo"
+    div.stButton {{
+        display: flex;
+        justify-content: center;
+    }}
 
-# ---------- MANAGER PLACEHOLDER ----------
-elif st.session_state.mode == "manager":
-    st.title("Manager Login")
-    st.info("Manager portal coming soon.")
-    if st.button("Back to Home"):
-        st.session_state.mode = "home"
+    div.stButton > button {{
+        width: 360px !important;
+        height: 280px !important;
+        background-color: {CMS_BLUE} !important;
+        color: white !important;
+        border-radius: 48px !important;
+        border: 4px solid white !important;
+        font-size: 64px !important;
+        font-weight: 700 !important;
+        line-height: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    }}
 
-# ---------- EMPLOYEE PLACEHOLDER ----------
-elif st.session_state.mode == "employee":
-    st.title("Employee Login")
-    st.info("Employee portal coming soon.")
-    if st.button("Back to Home"):
-        st.session_state.mode = "home"
+    div.stButton > button:hover {{
+        background-color: #1111a8 !important;
+        transform: translateY(-6px);
+        transition: all 0.2s ease;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-# ---------- DEMO MODE ----------
-elif st.session_state.mode == "demo":
-    st.sidebar.title("Demo Navigation")
+st.markdown('<div class="logo-center">', unsafe_allow_html=True)
+st.image("image(246).png", width=420)
+st.markdown("</div>", unsafe_allow_html=True)
 
-    view = st.sidebar.radio(
-        "Choose a view:",
-        [
-            "Dashboard",
-            "Employee Status Tracker",
-            "Performance Log",
-            "Business Insights",
-            "About This App"
-        ]
-    )
+st.markdown('<div class="welcome">Welcome Home</div>', unsafe_allow_html=True)
 
-    if st.sidebar.button("Back to Home"):
-        st.session_state.mode = "home"
+spacer1, col1, col2, spacer2 = st.columns([1, 2, 2, 1])
 
-    if view == "Dashboard":
-        st.title("Dashboard")
-        st.write("Overview metrics will go here.")
+with col1:
+    if st.button("Manager"):
+        st.switch_page("manager.py")
 
-    elif view == "Employee Status Tracker":
-        st.title("Employee Status Tracker")
-        st.write("Track who is active, unavailable, on job, or completed.")
-
-    elif view == "Performance Log":
-        st.title("Performance Log")
-        st.write("Log employee activity and job performance.")
-
-    elif view == "Business Insights":
-        st.title("Business Insights")
-        st.write("Forecasting, labor productivity, EBITDA-style metrics, and operational KPIs can go here.")
-
-    elif view == "About This App":
-        st.title("About This App")
-        st.write(
-            "This app was built to help small businesses track employee activity, "
-            "monitor operational performance, and turn daily work data into useful business insights."
-        )
+with col2:
+    if st.button("Employee"):
+        st.switch_page("employee.py")
