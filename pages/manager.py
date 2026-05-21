@@ -184,6 +184,9 @@ def placeholder_page(title):
     st.info(f"{title} coming soon.")
 
 
+
+view = st.query_params.get("view", "menu")
+
 if view == "menu":
     manager_menu()
 elif view == "employee_tracking":
