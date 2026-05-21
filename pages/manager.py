@@ -20,7 +20,7 @@ st.markdown(
         font-family: "Cresta", Georgia, serif;
     }}
 
-    .manager-title {{
+    .portal-title {{
         text-align: center;
         color: white;
         font-size: 64px;
@@ -29,7 +29,7 @@ st.markdown(
         margin-bottom: 10px;
     }}
 
-    .manager-subtitle {{
+    .portal-subtitle {{
         text-align: center;
         color: white;
         font-size: 34px;
@@ -41,7 +41,6 @@ st.markdown(
         grid-template-columns: repeat(3, 220px);
         gap: 32px 90px;
         justify-content: center;
-        align-items: center;
     }}
 
     .tile {{
@@ -55,11 +54,11 @@ st.markdown(
         justify-content: center;
         align-items: center;
         text-align: center;
-        color: white;
+        color: white !important;
         font-size: 28px;
         font-weight: 700;
         line-height: 1.1;
-        text-decoration: none;
+        text-decoration: none !important;
         padding: 18px;
         box-sizing: border-box;
     }}
@@ -68,14 +67,12 @@ st.markdown(
         background-color: #1111a8;
         transform: translateY(-4px);
         transition: all 0.2s ease;
-        color: white;
-        text-decoration: none;
     }}
 
     .back-link {{
-        color: white;
+        color: white !important;
         font-size: 20px;
-        text-decoration: none;
+        text-decoration: none !important;
         border: 2px solid white;
         border-radius: 14px;
         padding: 10px 16px;
@@ -83,9 +80,29 @@ st.markdown(
         margin-bottom: 25px;
     }}
 
-    .back-link:hover {{
-        background-color: white;
-        color: {CMS_BLUE};
+    @media (max-width: 768px) {{
+        .portal-title {{
+            font-size: 42px;
+            margin-top: 20px;
+        }}
+
+        .portal-subtitle {{
+            font-size: 24px;
+            margin-bottom: 35px;
+        }}
+
+        .tile-grid {{
+            grid-template-columns: 1fr;
+            gap: 24px;
+            padding: 0 18px;
+        }}
+
+        .tile {{
+            width: 100%;
+            height: 145px;
+            font-size: 26px;
+            box-shadow: 6px 6px 0px white;
+        }}
     }}
     </style>
     """,
@@ -96,15 +113,14 @@ load_dotenv()
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 view = st.query_params.get("view", "menu")
 
 
 def manager_menu():
-    st.markdown('<div class="manager-title">Hello Boss Man</div>', unsafe_allow_html=True)
-    st.markdown('<div class="manager-subtitle">What are we moving today?</div>', unsafe_allow_html=True)
+    st.markdown('<div class="portal-title">Hello Boss Man</div>', unsafe_allow_html=True)
+    st.markdown('<div class="portal-subtitle">What are we moving today?</div>', unsafe_allow_html=True)
 
     st.markdown(
         """
@@ -126,7 +142,6 @@ def manager_menu():
 
 def employee_tracking():
     st.markdown('<a class="back-link" href="?view=menu">← Back to Manager Portal</a>', unsafe_allow_html=True)
-
     st.title("Employee Tracking")
 
     with st.form("employee_form"):

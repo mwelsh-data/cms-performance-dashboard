@@ -16,7 +16,7 @@ st.markdown(
         font-family: "Cresta", Georgia, serif;
     }}
 
-    .employee-title {{
+    .portal-title {{
         text-align: center;
         color: white;
         font-size: 64px;
@@ -30,7 +30,6 @@ st.markdown(
         grid-template-columns: repeat(3, 220px);
         gap: 32px 90px;
         justify-content: center;
-        align-items: center;
     }}
 
     .tile {{
@@ -44,11 +43,11 @@ st.markdown(
         justify-content: center;
         align-items: center;
         text-align: center;
-        color: white;
+        color: white !important;
         font-size: 28px;
         font-weight: 700;
         line-height: 1.1;
-        text-decoration: none;
+        text-decoration: none !important;
         padding: 18px;
         box-sizing: border-box;
     }}
@@ -57,14 +56,12 @@ st.markdown(
         background-color: #1111a8;
         transform: translateY(-4px);
         transition: all 0.2s ease;
-        color: white;
-        text-decoration: none;
     }}
 
     .back-link {{
-        color: white;
+        color: white !important;
         font-size: 20px;
-        text-decoration: none;
+        text-decoration: none !important;
         border: 2px solid white;
         border-radius: 14px;
         padding: 10px 16px;
@@ -72,9 +69,25 @@ st.markdown(
         margin-bottom: 25px;
     }}
 
-    .back-link:hover {{
-        background-color: white;
-        color: {CMS_BLUE};
+    @media (max-width: 768px) {{
+        .portal-title {{
+            font-size: 42px;
+            margin-top: 20px;
+            margin-bottom: 35px;
+        }}
+
+        .tile-grid {{
+            grid-template-columns: 1fr;
+            gap: 24px;
+            padding: 0 18px;
+        }}
+
+        .tile {{
+            width: 100%;
+            height: 145px;
+            font-size: 26px;
+            box-shadow: 6px 6px 0px white;
+        }}
     }}
     </style>
     """,
@@ -85,7 +98,7 @@ view = st.query_params.get("view", "menu")
 
 
 def employee_menu():
-    st.markdown('<div class="employee-title">Lets Get Moving</div>', unsafe_allow_html=True)
+    st.markdown('<div class="portal-title">Lets Get Moving</div>', unsafe_allow_html=True)
 
     st.markdown(
         """
