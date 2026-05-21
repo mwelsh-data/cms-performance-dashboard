@@ -8,6 +8,20 @@ st.set_page_config(page_title="Manager Portal", layout="wide")
 
 CMS_BLUE = "#000080"
 
+
+def get_supabase_client():
+    load_dotenv()
+
+    try:
+        supabase_url = st.secrets["SUPABASE_URL"]
+        supabase_key = st.secrets["SUPABASE_KEY"]
+    except Exception:
+        supabase_url = os.getenv("SUPABASE_URL")
+        supabase_key = os.getenv("SUPABASE_KEY")
+
+    return create_client(supabase_url, supabase_key)
+
+
 st.markdown(
     f"""
     <style>
@@ -109,12 +123,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-load_dotenv()
 
-SUPABASE_URL = st.secrets.get("SUPABASE_URL") or os.getenv("SUPABASE_URL")
-SUPABASE_KEY = st.secrets.get("SUPABASE_KEY") or os.getenv("SUPABASE_KEY")
-
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+view = st.query_params.get("view", "menu")
 
 
 def manager_menu():
@@ -140,13 +150,24 @@ def manager_menu():
 
 
 def employee_tracking():
-    st.markdown('<a class="back-link" href="?view=menu">← Back to Manager Portal</a>', unsafe_allow_html=True)
+    supabase = get_supabase_client()
+
+    st.markdown(
+        '<a class="back-link" href="?view=menu">← Back to Manager Portal</a>',
+        unsafe_allow_html=True
+    )
+
     st.title("Employee Tracking")
 
     with st.form("employee_form"):
         employee_name = st.text_input("Employee Name")
         jobs_completed = st.number_input("Jobs Completed", min_value=0, step=1)
-        customer_rating = st.number_input("Customer Rating", min_value=0.0, max_value=5.0, step=0.1)
+        customer_rating = st.number_input(
+            "Customer Rating",
+            min_value=0.0,
+            max_value=5.0,
+            step=0.1
+        )
         late_arrival = st.checkbox("Late Arrival")
         damage_claim = st.checkbox("Damage Claim")
         paperwork_complete = st.checkbox("Paperwork Complete")
@@ -162,7 +183,7 @@ def employee_tracking():
                 "late_arrival": late_arrival,
                 "damage_claim": damage_claim,
                 "paperwork_complete": paperwork_complete,
-                "notes": notes
+                "notes": notes,
             }
 
             supabase.table("job_performance").insert(data).execute()
@@ -179,13 +200,13 @@ def employee_tracking():
 
 
 def placeholder_page(title):
-    st.markdown('<a class="back-link" href="?view=menu">← Back to Manager Portal</a>', unsafe_allow_html=True)
+    st.markdown(
+        '<a class="back-link" href="?view=menu">← Back to Manager Portal</a>',
+        unsafe_allow_html=True
+    )
     st.title(title)
     st.info(f"{title} coming soon.")
 
-
-
-view = st.query_params.get("view", "menu")
 
 if view == "menu":
     manager_menu()
