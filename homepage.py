@@ -74,8 +74,8 @@ spacer1, col1, col2, spacer2 = st.columns([1, 2, 2, 1])
 
 with col1:
     if st.button("Manager"):
-        st.switch_page("manager.py")
+        st.switch_page("pages/manager.py")
 
 with col2:
-    if st.button("Employee"):
-        st.switch_page("employee.py")
+    if st.button("Crew"):
+        st.switch_page("pages/employee.py")

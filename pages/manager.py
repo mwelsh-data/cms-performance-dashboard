@@ -8,9 +8,6 @@ st.set_page_config(page_title="Manager Portal", layout="wide")
 
 CMS_BLUE = "#000080"
 
-# -----------------------------
-# STYLE
-# -----------------------------
 st.markdown(
     f"""
     <style>
@@ -95,9 +92,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# -----------------------------
-# SETUP
-# -----------------------------
 load_dotenv()
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -108,9 +102,6 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 view = st.query_params.get("view", "menu")
 
 
-# -----------------------------
-# MANAGER MENU
-# -----------------------------
 def manager_menu():
     st.markdown('<div class="manager-title">Hello Boss Man</div>', unsafe_allow_html=True)
     st.markdown('<div class="manager-subtitle">What are we moving today?</div>', unsafe_allow_html=True)
@@ -133,9 +124,6 @@ def manager_menu():
     )
 
 
-# -----------------------------
-# EMPLOYEE TRACKING
-# -----------------------------
 def employee_tracking():
     st.markdown('<a class="back-link" href="?view=menu">← Back to Manager Portal</a>', unsafe_allow_html=True)
 
@@ -176,18 +164,12 @@ def employee_tracking():
         st.info("No performance records yet.")
 
 
-# -----------------------------
-# PLACEHOLDER PAGES
-# -----------------------------
 def placeholder_page(title):
     st.markdown('<a class="back-link" href="?view=menu">← Back to Manager Portal</a>', unsafe_allow_html=True)
     st.title(title)
     st.info(f"{title} coming soon.")
 
 
-# -----------------------------
-# ROUTER
-# -----------------------------
 if view == "menu":
     manager_menu()
 elif view == "employee_tracking":
