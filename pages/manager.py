@@ -1,8 +1,12 @@
-import streamlit as st
-import pandas as pd
-from supabase import create_client
-from dotenv import load_dotenv
 import os
+
+import pandas as pd
+import streamlit as st
+from dotenv import load_dotenv
+from supabase import create_client
+
+from components.manager_calendar import render_manager_calendar
+
 
 st.set_page_config(page_title="Manager Portal", layout="wide")
 
@@ -120,7 +124,7 @@ st.markdown(
     }}
     </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
 
@@ -128,8 +132,15 @@ view = st.query_params.get("view", "menu")
 
 
 def manager_menu():
-    st.markdown('<div class="portal-title">Hello Boss Man</div>', unsafe_allow_html=True)
-    st.markdown('<div class="portal-subtitle">What are we moving today?</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="portal-title">Hello Boss Man</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        '<div class="portal-subtitle">What are we moving today?</div>',
+        unsafe_allow_html=True,
+    )
 
     st.markdown(
         """
@@ -145,7 +156,7 @@ def manager_menu():
             <a class="tile" href="?view=fleet">Fleet /<br>Equipment</a>
         </div>
         """,
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 
 
@@ -153,21 +164,30 @@ def employee_tracking():
     supabase = get_supabase_client()
 
     st.markdown(
-        '<a class="back-link" href="?view=menu">← Back to Manager Portal</a>',
-        unsafe_allow_html=True
+        '<a class="back-link" href="?view=menu">'
+        "← Back to Manager Portal"
+        "</a>",
+        unsafe_allow_html=True,
     )
 
     st.title("Employee Tracking")
 
     with st.form("employee_form"):
         employee_name = st.text_input("Employee Name")
-        jobs_completed = st.number_input("Jobs Completed", min_value=0, step=1)
+
+        jobs_completed = st.number_input(
+            "Jobs Completed",
+            min_value=0,
+            step=1,
+        )
+
         customer_rating = st.number_input(
             "Customer Rating",
             min_value=0.0,
             max_value=5.0,
-            step=0.1
+            step=0.1,
         )
+
         late_arrival = st.checkbox("Late Arrival")
         damage_claim = st.checkbox("Damage Claim")
         paperwork_complete = st.checkbox("Paperwork Complete")
@@ -189,7 +209,12 @@ def employee_tracking():
             supabase.table("job_performance").insert(data).execute()
             st.success("Performance record added!")
 
-    response = supabase.table("job_performance").select("*").execute()
+    response = (
+        supabase.table("job_performance")
+        .select("*")
+        .execute()
+    )
+
     df = pd.DataFrame(response.data)
 
     if not df.empty:
@@ -201,32 +226,45 @@ def employee_tracking():
 
 def placeholder_page(title):
     st.markdown(
-        '<a class="back-link" href="?view=menu">← Back to Manager Portal</a>',
-        unsafe_allow_html=True
+        '<a class="back-link" href="?view=menu">'
+        "← Back to Manager Portal"
+        "</a>",
+        unsafe_allow_html=True,
     )
+
     st.title(title)
     st.info(f"{title} coming soon.")
 
 
 if view == "menu":
     manager_menu()
+
 elif view == "employee_tracking":
     employee_tracking()
+
 elif view == "scheduling":
     placeholder_page("Scheduling")
+
 elif view == "calendar":
-    placeholder_page("Calendar")
+    render_manager_calendar()
+
 elif view == "job_board":
     placeholder_page("Job Board")
+
 elif view == "crew_management":
     placeholder_page("Crew Management")
+
 elif view == "insights":
     placeholder_page("Insights")
+
 elif view == "claims":
     placeholder_page("Claims")
+
 elif view == "customer_feedback":
     placeholder_page("Customer Feedback")
+
 elif view == "fleet":
     placeholder_page("Fleet / Equipment")
+
 else:
     manager_menu()

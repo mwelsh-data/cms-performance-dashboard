@@ -1,8 +1,12 @@
 import streamlit as st
 
+from components.manager_calendar import render_manager_calendar
+
+
 st.set_page_config(page_title="Employee Portal", layout="wide")
 
 CMS_BLUE = "#000080"
+
 
 st.markdown(
     f"""
@@ -91,14 +95,18 @@ st.markdown(
     }}
     </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
+
 
 view = st.query_params.get("view", "menu")
 
 
 def employee_menu():
-    st.markdown('<div class="portal-title">Lets Get Moving</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="portal-title">Lets Get Moving</div>',
+        unsafe_allow_html=True,
+    )
 
     st.markdown(
         """
@@ -112,31 +120,65 @@ def employee_menu():
             <a class="tile" href="?view=pay_hub">Pay<br>Hub</a>
         </div>
         """,
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 
 
 def placeholder_page(title, message):
-    st.markdown('<a class="back-link" href="?view=menu">← Back to Employee Portal</a>', unsafe_allow_html=True)
+    st.markdown(
+        '<a class="back-link" href="?view=menu">'
+        "← Back to Employee Portal"
+        "</a>",
+        unsafe_allow_html=True,
+    )
+
     st.title(title)
     st.info(message)
 
 
 if view == "menu":
     employee_menu()
+
 elif view == "current_jobs":
-    placeholder_page("Current Jobs", "Current job details will go here.")
+    placeholder_page(
+        "Current Jobs",
+        "Current job details will go here.",
+    )
+
 elif view == "future_jobs":
-    placeholder_page("Future Jobs", "Upcoming assigned jobs will go here.")
+    placeholder_page(
+        "Future Jobs",
+        "Upcoming assigned jobs will go here.",
+    )
+
 elif view == "calendar":
-    placeholder_page("Calendar", "Employee schedule calendar will go here.")
+    render_manager_calendar(portal_name="Employee")
+
 elif view == "my_insights":
-    placeholder_page("My Insights", "Performance stats, completed jobs, ratings, and paperwork trends will go here.")
+    placeholder_page(
+        "My Insights",
+        "Performance stats, completed jobs, ratings, and paperwork trends "
+        "will go here.",
+    )
+
 elif view == "messages":
-    placeholder_page("Messages", "Manager updates and job notes will go here.")
+    placeholder_page(
+        "Messages",
+        "Manager updates and job notes will go here.",
+    )
+
 elif view == "report_issue":
-    placeholder_page("Report Issue", "Employees will be able to report delays, damages, or equipment issues here.")
+    placeholder_page(
+        "Report Issue",
+        "Employees will be able to report delays, damages, or equipment "
+        "issues here.",
+    )
+
 elif view == "pay_hub":
-    placeholder_page("Pay Hub", "Hours, bonuses, tips, and overtime snapshots will go here.")
+    placeholder_page(
+        "Pay Hub",
+        "Hours, bonuses, tips, and overtime snapshots will go here.",
+    )
+
 else:
     employee_menu()
